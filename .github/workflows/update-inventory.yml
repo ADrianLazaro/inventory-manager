@@ -15,7 +15,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           workflow: process-order.yml
           name: order-data
-          repo: TU-USUARIO/order-processor
+          repo: ADrianLazaro/order-processor
           
       - name: Process inventory
         run: |
