@@ -1,0 +1,39 @@
+name: Update Inventory
+on:
+  repository_dispatch:
+    types: [new-order]
+
+jobs:
+  update-inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download order data
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PAT }}
+          workflow: process-order.yml
+          name: order-data
+          repo: TU-USUARIO/order-processor
+          
+      - name: Process inventory
+        run: |
+          echo "Procesando orden..."
+          cat order.json
+          
+          # Simular actualización de inventario
+          echo '{
+            "updated": "'$(date)'",
+            "status": "processed",
+            "inventory_changes": [
+              {"product": "P001", "remaining": 18},
+              {"product": "P002", "remaining": 47}
+            ]
+          }' > inventory_report.json
+          
+      - name: Save inventory report
+        uses: actions/upload-artifact@v3
+        with:
+          name: inventory-report
+          path: inventory_report.json
